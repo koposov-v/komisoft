@@ -48,7 +48,12 @@ class StoreController extends Controller
         $queryTerm = Yii::$app->request->post('ajax');
         Yii::$app->response->format = \yii\web\Response::FORMAT_JSON;
         return $items = ['data' => Store::OutputIdStore($queryTerm)];
-
+    }
+    public function actionShow($name)
+    {
+        return $this->renderAjax('_modelview', [
+            'name' => $name,
+        ]);
     }
     /**
      * Displays a single Store model.

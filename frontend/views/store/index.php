@@ -21,10 +21,11 @@ $this->params['breadcrumbs'][] = $this->title;
 Modal::begin([
     'header'=>'<h2>Список устройств</h2>',
     'options' => [
-        'id'=>'listDevice',
+        'id'=>'events',
     ]
 ]);
-echo "<h1 class='s123'></h1>";
+echo "<div id='modelContent'></div>";
+
 Modal::end();
 
 
@@ -50,11 +51,12 @@ Modal::end();
                 'format' => 'raw',
                 'value' => function($model){
                     return Html::a("$model->name",
-                        ["$model->name"],
+                        ["store/?name=$model->name"],
                         [
                             'data-toggle'=>'modal',
-                            'data-target'=> '#listDevice',
+                            'data-target'=> '#events',
                         ]
+
                     );
                 },
             ],
@@ -68,26 +70,21 @@ Modal::end();
 <?php
     $js =<<<JS
     
-        const store = document.querySelectorAll('[data-target="#listDevice"]');
-        store.forEach((el)=>{
-            el.addEventListener("click",listId);
-        })
-        async function listId(e){
-            e.preventDefault()
-            let element = e.target.innerHTML;
-            $.ajax({
-                url: '/store/post-name',
-                data: {ajax: element},
-                type: 'POST',
-                success: function(res){
-                    
-                    $('.s123').html(res['data'])
-                },
-                error: function(){
-                    alert('Error!');
-                }
-            });
-        }
+    let data;
+    const store = document.querySelectorAll('[data-target="#events"]');
+    console.log(store);
+    store.forEach((el)=>{
+        el.addEventListener("click",listId);
+    })
+    async function listId(e){
+        let idElement = decodeURI(e.target.href.split("=")[1])
+        console.log(idElement)
+        $.get( `/store/show?name=`+idElement, {'data': data}, function(data){
+        $('#events')
+        .find('#modelContent')
+        .html(data);
+    });
+    }
 JS;
     $this->registerJs($js);
 ?>

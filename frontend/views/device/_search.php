@@ -2,7 +2,7 @@
 
 use yii\helpers\Html;
 use yii\widgets\ActiveForm;
-
+use kartik\select2\Select2;
 /* @var $this yii\web\View */
 /* @var $model frontend\models\DeviceSearch */
 /* @var $form yii\widgets\ActiveForm */
@@ -17,7 +17,17 @@ use yii\widgets\ActiveForm;
 
     <?= $form->field($model, 'id') ?>
 
-    <?= $form->field($model, 'store') ?>
+    <?= $form->field($model, 'store') ->widget(Select2::classname(), [
+        'data'=>    \frontend\models\Device::find()->select(['store'])->indexBy
+        'initValueText' => $model->store,
+        'options' => [
+            'placeholder' => 'Поиск...',
+        ],
+        'pluginOptions' => [
+            'minimumInputLength' => 3,
+        ],
+    ])
+    ?>
 
     <?= $form->field($model, 'data') ?>
 
