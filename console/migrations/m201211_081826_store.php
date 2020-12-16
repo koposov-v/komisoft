@@ -17,7 +17,16 @@ class m201211_081826_store extends Migration
             'name'=>$this->string()->notNull()->unique(),
             'date_created'=>$this->dateTime(),
             'date_updated'=>$this->dateTime(),
+            'device_id'=>$this->integer()->defaultValue(1),
         ]);
+        $this->addForeignKey(
+            'device_id',  // это "условное имя" ключа
+            'store', // это название текущей таблицы
+            'device_id', // это имя поля в текущей таблице, которое будет ключом
+            'device', // это имя таблицы, с которой хотим связаться
+            'id', // это поле таблицы, с которым хотим связаться
+            'CASCADE'
+        );
     }
 
     /**

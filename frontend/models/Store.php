@@ -11,7 +11,8 @@ use yii\helpers\ArrayHelper;
  *
  * @property int $id
  * @property string $name
- * @property string $data
+ * @property string $date_created
+ * @property string $date_updated
  */
 class Store extends ActiveRecord
 {
@@ -62,19 +63,15 @@ class Store extends ActiveRecord
         ];
     }
     static function OutputIdStore($name){
-        $query  = new Query();
-        $query->select
-        (['id'
-        ])
+        $query = self::find()
+            ->select('id')
             ->from('device')
-            ->where("device.store='$name'");
-        $command= $query->createCommand();
-        $result = $command->queryAll();
-        $final= [];
-        foreach ($result as $item){
-            array_push($final,$item['id'].' ');
+            ->where('store=:store',[':store' => $name])
+        $result = [];
+        foreach ($query as $item){
+            array_push($result,$item['id']);
         }
-        return $final;
+        return $result;
     }
     static function select_data($key, $value){
         return ArrayHelper::map( self::find()->all(),$key, $value);

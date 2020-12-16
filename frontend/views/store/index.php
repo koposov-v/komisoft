@@ -35,7 +35,10 @@ Modal::end();
     <p>
         <?= Html::a('Create Store', ['create'], ['class' => 'btn btn-success']) ?>
     </p>
-
+    <pre>
+    <?
+    var_dump(\frontend\models\Store::OutputIdStore("MTS")); ?>
+    </pre>
     <?=$this->render('_search', ['model' => $searchModel, 'data_name' => $data_name]); ?>
 
     <?= GridView::widget([
