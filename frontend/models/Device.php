@@ -2,8 +2,10 @@
 
 namespace frontend\models;
 
-use Yii;
+use yii\behaviors\TimestampBehavior;
 use yii\db\ActiveRecord;
+use yii\db\Expression;
+use yii\helpers\ArrayHelper;
 
 /**
  * This is the model class for table "device".
@@ -21,15 +23,27 @@ class Device extends ActiveRecord
     {
         return 'device';
     }
-
+    public function behaviors()
+    {
+        return [
+            [
+                'class' => TimestampBehavior::className(),
+                'attributes' => [
+                    ActiveRecord::EVENT_BEFORE_INSERT => ['date_created', 'date_updated'],
+                    ActiveRecord::EVENT_BEFORE_UPDATE => ['date_updated'],
+                ],
+                'value' => new Expression('NOW()'),
+            ],
+        ];
+    }
     /**
      * {@inheritdoc}
      */
     public function rules()
     {
         return [
-            [['data'], 'safe'],
-            [['store'], 'string', 'max' => 200],
+            [['date_updated','date_created'], 'datetime'],
+            [['store'], 'string'],
         ];
     }
 
@@ -41,7 +55,12 @@ class Device extends ActiveRecord
         return [
             'id' => 'ID',
             'store' => 'Store',
-            'data' => 'Data',
+            'date_updated'=>'Дата обновлена',
+            'date_created'=>'Дата создания',
         ];
     }
+    static function select_data($key, $value){
+        return ArrayHelper::map( self::find()->all(),$key, $value);
+    }
+
 }

@@ -11,9 +11,7 @@ use yii\widgets\ActiveForm;
 <div class="store-form">
 
     <?php $form = ActiveForm::begin(); ?>
-
-    <?= $form->field($model, 'name')->textInput(['maxlength' => true]) ?>
-    <?= $form->field($model, 'data')->textInput($model->touch('date')) ?>
+    <?= $form->field($model, 'name')->textInput() ?>
     <div class="form-group">
         <?= Html::submitButton('Save', ['class' => 'btn btn-success']) ?>
     </div>

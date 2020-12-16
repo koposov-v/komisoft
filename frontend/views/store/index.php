@@ -2,9 +2,7 @@
 
 use yii\helpers\Html;
 use yii\grid\GridView;
-use frontend\models\Store;
 use yii\bootstrap\Modal;
-use yii\helpers\Json;
 
 
 /* @var $this yii\web\View */
@@ -38,14 +36,12 @@ Modal::end();
         <?= Html::a('Create Store', ['create'], ['class' => 'btn btn-success']) ?>
     </p>
 
-    <?php // echo $this->render('_search', ['model' => $searchModel]); ?>
+    <?=$this->render('_search', ['model' => $searchModel, 'data_name' => $data_name]); ?>
 
     <?= GridView::widget([
         'dataProvider' => $dataProvider,
-        'filterModel' => $searchModel,
         'columns' => [
             ['class' => 'yii\grid\SerialColumn'],
-
             [
                 'attribute' => 'name',
                 'format' => 'raw',
@@ -55,12 +51,13 @@ Modal::end();
                         [
                             'data-toggle'=>'modal',
                             'data-target'=> '#events',
+                            'class' => 'modal-store',
+                            'data-name'=>"$model->name",
                         ]
-
                     );
                 },
             ],
-            'data',
+            'date_created',
             ['class' => 'yii\grid\ActionColumn'],
         ],
     ]); ?>
@@ -69,21 +66,20 @@ Modal::end();
 </div>
 <?php
     $js =<<<JS
-    
-    let data;
-    const store = document.querySelectorAll('[data-target="#events"]');
-    console.log(store);
-    store.forEach((el)=>{
-        el.addEventListener("click",listId);
+    $(document).ready(function (){
+        $('.modal-store').click(function (){
+            var name = $(this).data('name')
+            showModal('store/show?name='+name)
+        })
     })
-    async function listId(e){
-        let idElement = decodeURI(e.target.href.split("=")[1])
-        console.log(idElement)
-        $.get( `/store/show?name=`+idElement, {'data': data}, function(data){
-        $('#events')
-        .find('#modelContent')
-        .html(data);
-    });
+    
+     function showModal(url){
+        let data;
+        $.get( url, {'data': data}, function(data){
+            $('#events')
+                .find('#modelContent')
+                .html(data)
+        });
     }
 JS;
     $this->registerJs($js);

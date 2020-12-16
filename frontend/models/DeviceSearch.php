@@ -18,7 +18,7 @@ class DeviceSearch extends Device
     {
         return [
             [['id'], 'integer'],
-            [['store', 'data'], 'safe'],
+            [['store'], 'safe'],
         ];
     }
 
@@ -59,7 +59,6 @@ class DeviceSearch extends Device
         // grid filtering conditions
         $query->andFilterWhere([
             'id' => $this->id,
-            'data' => $this->data,
         ]);
 
         $query->andFilterWhere(['like', 'store', $this->store]);

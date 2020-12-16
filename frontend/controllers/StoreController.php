@@ -40,19 +40,19 @@ class StoreController extends Controller
         return $this->render('index', [
             'searchModel' => $searchModel,
             'dataProvider' => $dataProvider,
-
+            'data_name'=> Store::select_data('name','name'),
         ]);
     }
-    public function actionPostName()
-    {
-        $queryTerm = Yii::$app->request->post('ajax');
-        Yii::$app->response->format = \yii\web\Response::FORMAT_JSON;
-        return $items = ['data' => Store::OutputIdStore($queryTerm)];
-    }
+//    public function actionPostName()
+//    {
+//        $queryTerm = Yii::$app->request->post('ajax');
+//        Yii::$app->response->format = \yii\web\Response::FORMAT_JSON;
+//        return $items = ['data' => Store::OutputIdStore($queryTerm)];
+//    }
     public function actionShow($name)
     {
         return $this->renderAjax('_modelview', [
-            'name' => $name,
+            'result_id' => Store::OutputIdStore($name),
         ]);
     }
     /**

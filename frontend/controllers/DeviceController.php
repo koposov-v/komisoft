@@ -42,6 +42,7 @@ class DeviceController extends Controller
         return $this->render('index', [
             'searchModel' => $searchModel,
             'dataProvider' => $dataProvider,
+            'data_name'=> Device::select_data('store','store'),
         ]);
     }
 

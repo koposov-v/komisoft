@@ -2,10 +2,10 @@
 
 namespace frontend\models;
 use yii\behaviors\TimestampBehavior;
-use Yii;
 use yii\db\ActiveRecord;
-use yii\db\Query;
 use yii\db\Expression;
+use yii\db\Query;
+use yii\helpers\ArrayHelper;
 /**
  * This is the model class for table "store".
  *
@@ -26,13 +26,13 @@ class Store extends ActiveRecord
     public function behaviors()
     {
         return [
-            'timestamp' => [
-                'class' => 'yii\behaviors\TimestampBehavior',
+            [
+                'class' => TimestampBehavior::className(),
                 'attributes' => [
-                    ActiveRecord::EVENT_BEFORE_INSERT => ['date', 'updated_at'],
-                    ActiveRecord::EVENT_BEFORE_UPDATE => ['updated_at'],
+                    ActiveRecord::EVENT_BEFORE_INSERT => ['date_created', 'date_updated'],
+                    ActiveRecord::EVENT_BEFORE_UPDATE => ['date_updated'],
                 ],
-                'value' => date('Y-m-d '),
+                'value' => new Expression('NOW()'),
             ],
         ];
     }
@@ -42,10 +42,10 @@ class Store extends ActiveRecord
     public function rules()
     {
         return [
-            [['name', 'data'], 'required'],
-            [['data'], 'safe'],
-            [['name'], 'string', 'max' => 200],
+            [['name'], 'required'],
+            [['name'], 'string'],
             [['name'], 'unique'],
+            [['date_updated','date_created'], 'datetime'],
         ];
     }
 
@@ -55,9 +55,10 @@ class Store extends ActiveRecord
     public function attributeLabels()
     {
         return [
-            'id' => 'ID',
-            'name' => 'Name',
-            'data' => 'Data',
+            'id' => 'id',
+            'name' => 'Имя',
+            'date_updated'=>'Дата обновлена',
+            'date_created'=>'Дата создания'
         ];
     }
     static function OutputIdStore($name){
@@ -75,4 +76,8 @@ class Store extends ActiveRecord
         }
         return $final;
     }
+    static function select_data($key, $value){
+        return ArrayHelper::map( self::find()->all(),$key, $value);
+    }
+
 }

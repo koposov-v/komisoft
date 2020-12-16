@@ -18,7 +18,7 @@ class StoreSearch extends Store
     {
         return [
             [['id'], 'integer'],
-            [['name', 'data'], 'safe'],
+            [['name'], 'safe'],
         ];
     }
 
@@ -38,6 +38,7 @@ class StoreSearch extends Store
      *
      * @return ActiveDataProvider
      */
+
     public function search($params)
     {
         $query = Store::find();
@@ -59,7 +60,6 @@ class StoreSearch extends Store
         // grid filtering conditions
         $query->andFilterWhere([
             'id' => $this->id,
-            'data' => $this->data,
         ]);
 
         $query->andFilterWhere(['like', 'name', $this->name]);

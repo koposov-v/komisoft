@@ -14,8 +14,9 @@ class m201211_081826_store extends Migration
     {
         $this->createTable('store',[
             'id'=>$this->primaryKey(),
-            'name'=>$this->string(200)->notNull()->unique(),
-            'data'=>$this->date('Y-m-d H:i:s')->notNull(),
+            'name'=>$this->string()->notNull()->unique(),
+            'date_created'=>$this->dateTime(),
+            'date_updated'=>$this->dateTime(),
         ]);
     }
 

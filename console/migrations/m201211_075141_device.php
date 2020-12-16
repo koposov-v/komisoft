@@ -15,7 +15,8 @@ class m201211_075141_device extends Migration
         $this->createTable('device',[
             'id'=>$this->primaryKey(),
             'store'=>$this->string(200),
-            'data'=>$this->date('Y-m-d H:i:s')->notNull(),
+            'date_created'=>$this->dateTime(),
+            'date_updated'=>$this->dateTime(),
         ]);
     }
 
