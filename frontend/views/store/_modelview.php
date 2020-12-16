@@ -1,6 +1,7 @@
-<?if ($result_id) : ?>
-    <?php foreach ($result_id as $item) : ?>
-        <a href='store/index?StoreSearch%5Bid%5D=<?=$item?>&StoreSearch%5Bname%5D=' target="_blank" ><?=$item?></a>
+<? /** @var class $devices */
+if ($devices) : ?>
+    <?php foreach ($devices as $device) : ?>
+        <a href='device/index?DeviceSearch[id]=<?=$device->id?>' target="_blank" ><?=$device->store?></a>
     <?php endforeach; ?>
 
 <? else : ?>

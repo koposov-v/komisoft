@@ -3,7 +3,8 @@
 use yii\helpers\Html;
 use yii\grid\GridView;
 use yii\bootstrap\Modal;
-
+use kartik\select2\Select2;
+use yii\helpers\ArrayHelper;
 
 /* @var $this yii\web\View */
 /* @var $searchModel frontend\models\StoreSearch */
@@ -35,32 +36,45 @@ Modal::end();
     <p>
         <?= Html::a('Create Store', ['create'], ['class' => 'btn btn-success']) ?>
     </p>
-    <pre>
-    <?
-    var_dump(\frontend\models\Store::OutputIdStore("MTS")); ?>
-    </pre>
-    <?=$this->render('_search', ['model' => $searchModel, 'data_name' => $data_name]); ?>
+    <?//=$this->render('_search', ['model' => $searchModel]); ?>
 
     <?= GridView::widget([
         'dataProvider' => $dataProvider,
+        'filterModel' => $searchModel,
         'columns' => [
             ['class' => 'yii\grid\SerialColumn'],
             [
                 'attribute' => 'name',
                 'format' => 'raw',
+                'filter' =>  Select2::widget([
+                    'model' => $searchModel,
+                    'attribute' => 'name',
+                    'data' => ArrayHelper::map(\frontend\models\Store::find()->asArray()->all(), 'name', 'name'),
+                    'value' => 'name',
+                    'options' => [
+                        'class' => 'form-control',
+                        'placeholder' => 'Выберите значение'
+                    ],
+                    'pluginOptions' => [
+                        'allowClear' => true,
+                        'selectOnClose' => true,
+                    ]
+                ]),
                 'value' => function($model){
                     return Html::a("$model->name",
-                        ["store/?name=$model->name"],
+                        ["store/?storeid=$model->id"],
                         [
                             'data-toggle'=>'modal',
                             'data-target'=> '#events',
                             'class' => 'modal-store',
-                            'data-name'=>"$model->name",
+                            'data-id'=>"$model->id",
                         ]
                     );
                 },
             ],
-            'date_created',
+            [
+                'attribute' => 'date_created',
+            ],
             ['class' => 'yii\grid\ActionColumn'],
         ],
     ]); ?>
@@ -68,11 +82,11 @@ Modal::end();
 
 </div>
 <?php
-    $js =<<<JS
+$js =<<<JS
     $(document).ready(function (){
         $('.modal-store').click(function (){
-            var name = $(this).data('name')
-            showModal('store/show?name='+name)
+            var store_id = $(this).data('id')
+            showModal('http://front.test/store/show?storeId='+store_id)
         })
     })
     
@@ -85,5 +99,5 @@ Modal::end();
         });
     }
 JS;
-    $this->registerJs($js);
+$this->registerJs($js);
 ?>

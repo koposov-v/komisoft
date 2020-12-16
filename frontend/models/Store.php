@@ -4,7 +4,6 @@ namespace frontend\models;
 use yii\behaviors\TimestampBehavior;
 use yii\db\ActiveRecord;
 use yii\db\Expression;
-use yii\db\Query;
 use yii\helpers\ArrayHelper;
 /**
  * This is the model class for table "store".
@@ -13,6 +12,7 @@ use yii\helpers\ArrayHelper;
  * @property string $name
  * @property string $date_created
  * @property string $date_updated
+
  */
 class Store extends ActiveRecord
 {
@@ -62,19 +62,19 @@ class Store extends ActiveRecord
             'date_created'=>'Дата создания'
         ];
     }
-    static function OutputIdStore($name){
-        $query = self::find()
-            ->select('id')
-            ->from('device')
-            ->where('store=:store',[':store' => $name])
-        $result = [];
-        foreach ($query as $item){
-            array_push($result,$item['id']);
-        }
-        return $result;
-    }
-    static function select_data($key, $value){
-        return ArrayHelper::map( self::find()->all(),$key, $value);
-    }
 
+    /**
+     * @param Store $model
+     * @return array
+     */
+    static function getDevices(Store $model):array
+    {
+        return Device::find()
+            ->where(['store_id'=>$model->id])
+            ->all();
+    }
+    function getPropertiesForSearch($key, $value): array
+    {
+        return ArrayHelper::map( \frontend\models\Store::find()->all(),$key, $value);
+    }
 }

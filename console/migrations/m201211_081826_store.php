@@ -15,18 +15,9 @@ class m201211_081826_store extends Migration
         $this->createTable('store',[
             'id'=>$this->primaryKey(),
             'name'=>$this->string()->notNull()->unique(),
-            'date_created'=>$this->dateTime(),
-            'date_updated'=>$this->dateTime(),
-            'device_id'=>$this->integer()->defaultValue(1),
+            'date_created'=>$this->dateTime()->notNull(),
+            'date_updated'=>$this->dateTime()->notNull(),
         ]);
-        $this->addForeignKey(
-            'device_id',  // это "условное имя" ключа
-            'store', // это название текущей таблицы
-            'device_id', // это имя поля в текущей таблице, которое будет ключом
-            'device', // это имя таблицы, с которой хотим связаться
-            'id', // это поле таблицы, с которым хотим связаться
-            'CASCADE'
-        );
     }
 
     /**

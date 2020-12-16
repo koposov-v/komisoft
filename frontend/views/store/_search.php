@@ -1,5 +1,6 @@
 <?php
 
+use yii\helpers\ArrayHelper;
 use yii\helpers\Html;
 use yii\widgets\ActiveForm;
 use kartik\select2\Select2;
@@ -9,7 +10,17 @@ use kartik\select2\Select2;
 /* @var $model frontend\models\StoreSearch */
 /* @var $form yii\widgets\ActiveForm */
 ?>
-
+<?php
+/**
+ * @param $key
+ * @param $value
+ * @return array
+ */
+function getPropertiesForSearch($key, $value): array
+{
+    return ArrayHelper::map( \frontend\models\Store::find()->all(),$key, $value);
+}
+?>
 <div class="store-search">
 
     <?php $form = ActiveForm::begin([
@@ -19,7 +30,7 @@ use kartik\select2\Select2;
 
     <?= $form->field($model, 'id');?>
     <?=$form->field($model, 'name')->widget(Select2::classname(), [
-        'data' => $data_name,
+        'data' => getPropertiesForSearch('name','name'),
         'language' => 'Ru',
         'options' => ['placeholder' => 'Select a store ...'],
         'pluginOptions' => [

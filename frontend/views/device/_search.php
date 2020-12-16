@@ -18,7 +18,7 @@ use kartik\select2\Select2;
 
     <?= $form->field($model, 'id') ?>
     <?= $form->field($model, 'store')->widget(Select2::classname(), [
-        'data' => $data_name,
+        'data' => /*$data_name*/' ',
         'language' => 'Ru',
         'options' => ['placeholder' => 'Select a store ...'],
         'pluginOptions' => [

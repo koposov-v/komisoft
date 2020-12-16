@@ -14,10 +14,27 @@ class m201211_075141_device extends Migration
     {
         $this->createTable('device',[
             'id'=>$this->primaryKey(),
-            'store'=>$this->string(200),
-            'date_created'=>$this->dateTime(),
-            'date_updated'=>$this->dateTime(),
+            'store'=>$this->string(),
+            'date_created'=>$this->dateTime()->notNull(),
+            'date_updated'=>$this->dateTime()->notNull(),
+            'store_id'=>$this->integer()->defaultValue(1),
         ]);
+        // creates index for column `store_id`
+        $this->createIndex(
+            'idx-device-store_id',
+            'device',
+            'store_id'
+        );
+
+        // add foreign key for table `store`
+        $this->addForeignKey(
+            'fk-device-store_id',
+            'device',
+            'store_id',
+            'store',
+            'id',
+            'CASCADE'
+        );
     }
 
     /**
@@ -25,9 +42,7 @@ class m201211_075141_device extends Migration
      */
     public function safeDown()
     {
-        echo "m201211_075141_device cannot be reverted.\n";
-
-        return false;
+        $this->dropTable('device');
     }
 
     /*

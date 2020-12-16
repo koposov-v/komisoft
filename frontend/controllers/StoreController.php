@@ -9,6 +9,7 @@ use yii\web\Controller;
 use yii\web\NotFoundHttpException;
 use yii\filters\VerbFilter;
 
+
 /**
  * StoreController implements the CRUD actions for Store model.
  */
@@ -40,7 +41,6 @@ class StoreController extends Controller
         return $this->render('index', [
             'searchModel' => $searchModel,
             'dataProvider' => $dataProvider,
-            'data_name'=> Store::select_data('name','name'),
         ]);
     }
 //    public function actionPostName()
@@ -49,10 +49,16 @@ class StoreController extends Controller
 //        Yii::$app->response->format = \yii\web\Response::FORMAT_JSON;
 //        return $items = ['data' => Store::OutputIdStore($queryTerm)];
 //    }
-    public function actionShow($name)
+    /**
+     * @param $storeId
+     * @return string
+     * @throws NotFoundHttpException
+     */
+    public function actionShow($storeId): string
     {
+        $store = $this->findModel($storeId);
         return $this->renderAjax('_modelview', [
-            'result_id' => Store::OutputIdStore($name),
+            'devices' => Store::getDevices($store),
         ]);
     }
     /**
