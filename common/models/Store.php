@@ -1,27 +1,28 @@
 <?php
 
-namespace frontend\models;
-
+namespace common\models;
 use yii\behaviors\TimestampBehavior;
 use yii\db\ActiveRecord;
 use yii\db\Expression;
 use yii\helpers\ArrayHelper;
-
 /**
- * This is the model class for table "device".
+ * This is the model class for table "store".
  *
  * @property int $id
- * @property string|null $store
- * @property string|null $data
+ * @property string $name
+ * @property string $date_created
+ * @property string $date_updated
+
  */
-class Device extends ActiveRecord
+class Store extends ActiveRecord
 {
     /**
      * {@inheritdoc}
      */
+
     public static function tableName()
     {
-        return 'device';
+        return 'store';
     }
     public function behaviors()
     {
@@ -42,8 +43,10 @@ class Device extends ActiveRecord
     public function rules()
     {
         return [
+            [['name'], 'required'],
+            [['name'], 'string'],
+            [['name'], 'unique'],
             [['date_updated','date_created'], 'datetime'],
-            [['store'], 'string'],
         ];
     }
 
@@ -53,14 +56,25 @@ class Device extends ActiveRecord
     public function attributeLabels()
     {
         return [
-            'id' => 'ID',
-            'store' => 'Store',
+            'id' => 'id',
+            'name' => 'Имя',
             'date_updated'=>'Дата обновлена',
-            'date_created'=>'Дата создания',
+            'date_created'=>'Дата создания'
         ];
     }
-    static function select_data($key, $value){
-        return ArrayHelper::map( self::find()->all(),$key, $value);
-    }
 
+    /**
+     * @param Store $model
+     * @return array
+     */
+    static function getDevices(Store $model):array
+    {
+        return Device::find()
+            ->where(['store_id'=>$model->id])
+            ->all();
+    }
+    function getPropertiesForSearch($key, $value): array
+    {
+        return ArrayHelper::map( \frontend\models\Store::find()->all(),$key, $value);
+    }
 }

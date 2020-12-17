@@ -3,8 +3,8 @@
 namespace frontend\controllers;
 
 use Yii;
-use frontend\models\Device;
-use frontend\models\DeviceSearch;
+use common\models\Device;
+use common\models\DeviceSearch;
 use yii\web\Controller;
 use yii\web\NotFoundHttpException;
 use yii\filters\VerbFilter;
@@ -35,15 +35,18 @@ class DeviceController extends Controller
      */
     public function actionIndex()
     {
-        $searchModel = new DeviceSearch();
-        $dataProvider = $searchModel->search(Yii::$app->request->queryParams);
+        if (!Yii::$app->user->isGuest) {
+            $searchModel = new DeviceSearch();
+            $dataProvider = $searchModel->search(Yii::$app->request->queryParams);
 
-
-        return $this->render('index', [
-            'searchModel' => $searchModel,
-            'dataProvider' => $dataProvider,
-            'data_name'=> Device::select_data('store','store'),
-        ]);
+            return $this->render('index', [
+                'searchModel' => $searchModel,
+                'dataProvider' => $dataProvider,
+                'data_name' => Device::select_data('store', 'store'),
+            ]);
+        }else{
+            return $this->redirect('site/login');
+        }
     }
 
     /**

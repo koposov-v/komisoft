@@ -1,5 +1,6 @@
 <?php
 
+use common\models\Device;
 use yii\helpers\Html;
 use yii\grid\GridView;
 use kartik\select2\Select2;
@@ -34,7 +35,7 @@ $this->params['breadcrumbs'][] = $this->title;
                 'filter' =>  Select2::widget([
                     'model' => $searchModel,
                     'attribute' => 'store',
-                    'data' => ArrayHelper::map(\frontend\models\Device::find()->asArray()->all(), 'store', 'store'),
+                    'data' => ArrayHelper::map(Device::find()->asArray()->all(), 'store', 'store'),
                     'value' => 'store',
                     'options' => [
                         'class' => 'form-control',

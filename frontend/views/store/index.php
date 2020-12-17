@@ -1,5 +1,6 @@
 <?php
 
+use common\models\Store;
 use yii\helpers\Html;
 use yii\grid\GridView;
 use yii\bootstrap\Modal;
@@ -27,7 +28,6 @@ echo "<div id='modelContent'></div>";
 
 Modal::end();
 
-
 ?>
 <div class="store-index">
 
@@ -49,7 +49,7 @@ Modal::end();
                 'filter' =>  Select2::widget([
                     'model' => $searchModel,
                     'attribute' => 'name',
-                    'data' => ArrayHelper::map(\frontend\models\Store::find()->asArray()->all(), 'name', 'name'),
+                    'data' => ArrayHelper::map(Store::find()->asArray()->all(), 'name', 'name'),
                     'value' => 'name',
                     'options' => [
                         'class' => 'form-control',
